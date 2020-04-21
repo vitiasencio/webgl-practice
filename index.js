@@ -14,6 +14,7 @@ let program = createProgram(gl, vertexShader, fragmentShader);
 
 let positionAttributeLocation = gl.getAttribLocation(program, 'a_position');
 
+let colorUniformLocation = gl.getUniformLocation(program, 'u_color');
 
 const positions = [ -0.5, -0.5,
                     0.5, -0.5,
@@ -41,6 +42,11 @@ gl.bindVertexArray(null);
 
 // Tell it to use our program (pair of shaders)
 gl.useProgram(program);
+
+
+// NOTE: los uniform se setean luego del useProgram
+// Uniform para el color en fragment shader
+gl.uniform4f(colorUniformLocation, 0.0, 1.0, 0.0, 1.0);
 
 // Bind the attribute/buffer set we want
 gl.bindVertexArray(vao);
