@@ -1,5 +1,5 @@
 import { vertexShaderSource, fragmentShaderSource } from './js/shaders.js';
-import { getCanvas, getRenderingContext, createShader, createProgram, createVertexBuffer, bindAttributeToVertexBuffer } from './js/utils.js';
+import { getCanvas, getRenderingContext, createShader, createProgram, createVertexBuffer, createIndexBuffer, bindAttributeToVertexBuffer } from './js/utils.js';
 
 const CANVASID = 'myCanvas';
 
@@ -38,22 +38,34 @@ let fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
 let program = createProgram(gl, vertexShader, fragmentShader);
 
 /**
- * PASO 5 - Creo un buffer para las posiciones de los vertices.
+ * PASO 5 - Creo un buffer para las posiciones de los vertices y otro para sus indices.
  */
 
-const positions = [ -0.5, -0.5,
-                    0.5, -0.5,
-                    0.0, 0.3,
+const positions = [ -0.5, -0.5, // Indice 1
+                    0.5, -0.5,  // Indice 2
+                    0.5, 0.5,   // Indice 3
+                    -0.5, 0.5,  // Indice 4
                   ],
-      vertexCount = 3;
+      colors    = [ 1.0, 0.0, 0.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 0.0, 1.0,
+                    0.5, 0.0, 1.0,
+                  ];
+
+const indexes = [ 0, 1, 2, // Triangulo 1
+                  0, 2, 3, // Triangulo 2
+                ];
 
 let positionBuffer = createVertexBuffer(gl, positions);
+let colorBuffer = createVertexBuffer(gl, colors);
+let indexBuffer = createIndexBuffer(gl, indexes);
 
 /**
  * PASO 6 - Obtengo la posicion del atributo de entrada al vertex shader
  */
 
 let positionAttributeLocation = gl.getAttribLocation(program, 'a_position');
+let colorAttributeLocation = gl.getAttribLocation(program, 'vertex_color');
 
 /**
  * PASO 7 - Creo un VAO y lo bindeo
@@ -70,6 +82,14 @@ gl.bindVertexArray(vao);
 gl.enableVertexAttribArray(positionAttributeLocation);
 bindAttributeToVertexBuffer(gl, positionAttributeLocation, 2, positionBuffer, vertexSize, 0);
 
+gl.enableVertexAttribArray(colorAttributeLocation);
+bindAttributeToVertexBuffer(gl,colorAttributeLocation, 3, colorBuffer, 0, 0)
+
+/**
+ * Conectamos el arreglo de indices que vamos a usar.
+ */
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
 gl.bindVertexArray(null);
 
 /**
@@ -84,15 +104,9 @@ gl.bindVertexArray(vao);
 
 gl.clear(gl.COLOR_BUFFER_BIT);
 
-// NOTE: los uniform se setean luego del useProgram
-// Uniform para el color en fragment shader
-/*let colorUniformLocation = gl.getUniformLocation(program, 'u_color');
-
-gl.uniform4f(colorUniformLocation, 0.0, 1.0, 0.0, 1.0);*/
-
 /**
  * PASO 10 - Dibujo
  */
 
-gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
+gl.drawElements(gl.TRIANGLES, indexes.length, gl.UNSIGNED_SHORT, 0);
 
