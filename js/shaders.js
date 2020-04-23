@@ -35,7 +35,7 @@ out vec4 outColor;
 void main() {
 
     // Just set the output to a constant reddish-purple
-    outColor = vec4(frag_color,1);
+    outColor = vec4(0.5, 0.0, 0.5, 1);
 }
 
 
