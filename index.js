@@ -41,23 +41,39 @@ let program = createProgram(gl, vertexShader, fragmentShader);
  * PASO 5 - Creo un buffer para las posiciones de los vertices y otro para sus indices.
  */
 
-const positions = [ -0.5, -0.5, // Indice 1
-                    0.5, -0.5,  // Indice 2
-                    0.5, 0.5,   // Indice 3
-                    -0.5, 0.5,  // Indice 4
+const positions = [ 0.0, -0.1,    // Indice 0
+                    0.0, 0.5,     // Indice 1
+                    0.2, 0.1,     // Indice 2
+                    0.6, 0.0,     // Indice 3
+                    0.35, -0.25,  // Indice 4
+                    0.45, -0.6,   // Indice 5
+                    0.0, -0.45,   // Indice 6
+                    -0.45, -0.6,  // Indice 7
+                    -0.35, -0.25, // Indice 8
+                    -0.6, 0.0,    // Indice 9
+                    -0.2, 0.1,    // Indice 10
                   ],
-      colors    = [ 1.0, 0.0, 0.0,
-                    0.0, 1.0, 0.0,
+      colors    = [ 22.0/256, 164.0/256, 228.0/256,
+                    0.0, 251.0/256, 220.0/256,
                     0.0, 0.0, 1.0,
                     0.5, 0.0, 1.0,
-                  ];
+                ];
 
-const indexes = [ 0, 1, 2, // Triangulo 1
-                  0, 2, 3, // Triangulo 2
+
+const indexes = [ 0, 2, 1, // Triangulo 1
+                  0, 3, 2, // Triangulo 2
+                  0, 4, 3, // Triangulo 2
+                  0, 5, 4, // Triangulo 2
+                  0, 6, 5, // Triangulo 2
+                  0, 7, 6, // Triangulo 2
+                  0, 8, 7, // Triangulo 2
+                  0, 9, 8, // Triangulo 2
+                  0, 10, 9, // Triangulo 2
+                  0, 1, 10, // Triangulo 2
                 ];
 
 let positionBuffer = createVertexBuffer(gl, positions);
-let colorBuffer = createVertexBuffer(gl, colors);
+//let colorBuffer = createVertexBuffer(gl, colors);
 let indexBuffer = createIndexBuffer(gl, indexes);
 
 /**
@@ -65,7 +81,7 @@ let indexBuffer = createIndexBuffer(gl, indexes);
  */
 
 let positionAttributeLocation = gl.getAttribLocation(program, 'a_position');
-let colorAttributeLocation = gl.getAttribLocation(program, 'vertex_color');
+//let colorAttributeLocation = gl.getAttribLocation(program, 'vertex_color');
 
 /**
  * PASO 7 - Creo un VAO y lo bindeo
@@ -82,8 +98,8 @@ gl.bindVertexArray(vao);
 gl.enableVertexAttribArray(positionAttributeLocation);
 bindAttributeToVertexBuffer(gl, positionAttributeLocation, 2, positionBuffer, vertexSize, 0);
 
-gl.enableVertexAttribArray(colorAttributeLocation);
-bindAttributeToVertexBuffer(gl,colorAttributeLocation, 3, colorBuffer, 0, 0)
+//gl.enableVertexAttribArray(colorAttributeLocation);
+//bindAttributeToVertexBuffer(gl,colorAttributeLocation, 3, colorBuffer, 0, 0)
 
 /**
  * Conectamos el arreglo de indices que vamos a usar.
