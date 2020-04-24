@@ -161,10 +161,10 @@ gl.bindVertexArray(vao);
  */
 
 gl.enableVertexAttribArray(positionAttributeLocation);
-bindAttributeToVertexBuffer(gl, positionAttributeLocation, 2, positionBuffer, vertexSize, 0);
+bindAttributeToVertexBuffer(gl, positionAttributeLocation, 2, positionBuffer);
 
 gl.enableVertexAttribArray(colorAttributeLocation);
-bindAttributeToVertexBuffer(gl,colorAttributeLocation, 3, colorBuffer, 0, 0)
+bindAttributeToVertexBuffer(gl,colorAttributeLocation, 3, colorBuffer)
 
 /**
  * Conectamos el arreglo de indices que vamos a usar.
