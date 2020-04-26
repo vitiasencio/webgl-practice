@@ -59,10 +59,19 @@ export function createVertexBuffer(gl, data) {
     return positionBuffer;
 }
 
-export function bindAttributeToVertexBuffer(gl, positionAttributeLocation, size, positionBuffer, vertexSize, offset){
+export function createIndexBuffer(gl, data) {
+    let positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(data), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
+    return positionBuffer;
+}
+
+export function bindAttributeToVertexBuffer(gl, positionAttributeLocation, size, positionBuffer){
     
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.vertexAttribPointer( positionAttributeLocation, size, gl.FLOAT, false, vertexSize*Float32Array.BYTES_PER_ELEMENT, offset*Float32Array.BYTES_PER_ELEMENT );
+    gl.vertexAttribPointer( positionAttributeLocation, size, gl.FLOAT, false, 0, 0);
     gl.bindBuffer(gl.ARRAY_BUFFER,null);
     
 }
