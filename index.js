@@ -1,10 +1,8 @@
 import { vertexShaderSource, fragmentShaderSource } from './js/shaders.js';
 import { getCanvas, getRenderingContext, createShader, createProgram, createVertexBuffer, bindAttributeToVertexBuffer, createIndexBuffer } from './js/utils.js';
+import { mat4, glMatrix } from './js/gl-matrix/index.js'
 
 const CANVASID = 'myCanvas';
-
-const vertexSize = 2;
-
 
 /**
  * PASO 1 - Obtengo el canvas del HTML
@@ -23,7 +21,7 @@ let gl = getRenderingContext(canvas);
  */
 
 gl.clearColor(1, 1, 1, 1);
-
+gl.enable(gl.DEPTH_TEST);
 /**
  * PASO 3 - Creo y compilo los shaders
  */
@@ -89,6 +87,7 @@ gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
 gl.bindVertexArray(null);
 
+
 /**
  * PASO 9 - Le decimos a WebGL que use el program creado con nuestros shaders
  * Bindeo el VAO.
@@ -99,17 +98,40 @@ gl.useProgram(program);
 
 gl.bindVertexArray(vao);
 
-gl.clear(gl.COLOR_BUFFER_BIT);
+/**
+ * CAMERA SETUP
+ */
+const viewMatrixLocation = gl.getUniformLocation(program, "viewMatrix")
+const projectionMatrixLocation = gl.getUniformLocation(program, "projectionMatrix")
+
+const viewMatrix = mat4.create()
+const projectionMatrix = mat4.create()
+
+const eye = [3, 3, 5]
+const center = [0, 0, 0]
+const up = [0, 1, 0]
+mat4.lookAt(viewMatrix, eye, center, up)
+
+const fov = glMatrix.toRadian(45)
+const aspect = canvas.width / canvas.height
+const near = 0.1
+const far = 10
+mat4.perspective(projectionMatrix, fov, aspect, near, far)
+
+gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix)
+gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix)
+
+/**
+ * END CAMERA SETUP
+ */
+
+gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 // NOTE: los uniform se setean luego del useProgram
 // Uniform para el color en fragment shader
-/*let colorUniformLocation = gl.getUniformLocation(program, 'u_color');
-
-gl.uniform4f(colorUniformLocation, 0.0, 1.0, 0.0, 1.0);*/
 
 /**
  * PASO 10 - Dibujo
  */
 
 gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
-
