@@ -39,24 +39,51 @@ let program = createProgram(gl, vertexShader, fragmentShader);
  * PASO 5 - Creo un buffer para las posiciones de los vertices.
  */
 
-const positions = [ 
-        -0.5, -0.5,
-        0.5, -0.5,
-        0.0, 0.3,
-];
+const vertexPositions = [
+  -1, 1, 1,   
+  1, 1, 1,    
+  1, 1, -1,   
+  -1, 1, -1,  
+  -1, -1, 1,  
+  1, -1, 1,   
+  1, -1, -1,  
+  -1, -1, -1  
+]
 
-const colors = [
-    1.0, 0.0, 0.0,
-    0.0, 1.0, 0.0,
-    0.0, 0.0, 1.0,
-];
+const vertexColors = [
+  1, 0, 1,    
+  1, 1, 1,    
+  0, 1, 1,    
+  0, 0, 1,    
+  1, 0, 0,    
+  1, 1, 0,    
+  0, 1, 0,    
+  0, 0, 0     
+]
 
 const indices = [
-    0, 1, 2
-];
+  // cara de arriba
+  0, 1, 3,
+  3, 1, 2,
+  // abajo
+  7, 5, 4,
+  5, 7, 6,
+  // izquierda
+  3, 4, 0,
+  3, 7, 4,
+  // derecha
+  5, 2, 1,
+  5, 6, 2,
+  // adelante
+  4, 1, 0,
+  4, 5, 1,
+  // atrás
+  6, 3, 2,
+  6, 7, 3,
+]
 
-let positionBuffer = createVertexBuffer(gl, positions);
-let colorBuffer = createVertexBuffer(gl, colors);
+let positionBuffer = createVertexBuffer(gl, vertexPositions);
+let colorBuffer = createVertexBuffer(gl, vertexColors);
 let indexBuffer = createIndexBuffer(gl, indices)
 
 /**
@@ -79,7 +106,7 @@ gl.bindVertexArray(vao);
  */
 
 gl.enableVertexAttribArray(positionAttributeLocation);
-bindAttributeToVertexBuffer(gl, positionAttributeLocation, 2, positionBuffer);
+bindAttributeToVertexBuffer(gl, positionAttributeLocation, 3, positionBuffer);
 gl.enableVertexAttribArray(colorAttributeLocation);
 bindAttributeToVertexBuffer(gl, colorAttributeLocation, 3, colorBuffer);
 
@@ -107,7 +134,7 @@ const projectionMatrixLocation = gl.getUniformLocation(program, "projectionMatri
 const viewMatrix = mat4.create()
 const projectionMatrix = mat4.create()
 
-const eye = [3, 3, 5]
+const eye = [2, 2, 9]
 const center = [0, 0, 0]
 const up = [0, 1, 0]
 mat4.lookAt(viewMatrix, eye, center, up)

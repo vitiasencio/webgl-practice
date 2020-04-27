@@ -5,7 +5,7 @@ precision mediump float;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
-in vec2 a_position;
+in vec3 a_position;
 in vec3 vertex_color;
 
 out vec3 frag_color;
@@ -15,7 +15,7 @@ void main() {
     frag_color = vertex_color;
     // gl_position is a special variable a vertex shader
     // is responsible for setting
-    gl_Position = projectionMatrix * viewMatrix * vec4(a_position, 0, 1);
+    gl_Position = projectionMatrix * viewMatrix * vec4(a_position, 1);
 }
 
 `
