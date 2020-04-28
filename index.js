@@ -2,6 +2,7 @@ import { vertexShaderSource, fragmentShaderSource } from './js/shaders.js';
 import { getCanvas, getRenderingContext, createShader, createProgram, createVertexBuffer, bindAttributeToVertexBuffer, createIndexBuffer } from './js/utils.js';
 import { mat4, glMatrix } from './js/gl-matrix/index.js'
 import { Cube } from './models/Cube.js';
+import { Axis } from './models/WorldAxis.js';
 
 const CANVASID = 'myCanvas';
 
@@ -70,14 +71,24 @@ gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix)
 
 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-const sceneElements = [];
+let sceneElements = [];
+let worldAxis = new Axis(gl, program);
 
-const button = document.getElementById("add-element");
 
-button.addEventListener('click', () => {
+const addButton = document.getElementById("add-element");
+
+addButton.addEventListener('click', () => {
     let newCube = new Cube(gl, program);
     sceneElements.push(newCube);
 })
+
+const resetButton = document.getElementById("clear-screen");
+
+resetButton.addEventListener('click', () => {
+    sceneElements = []
+})
+
+const axisCheckbox = document.getElementById("axis-checkbox");
 
 
 function renderScene() {
@@ -87,6 +98,11 @@ function renderScene() {
     sceneElements.forEach(elem => {
         elem.render()
     });
+
+    if ( axisCheckbox.checked ) {
+        worldAxis.render();
+    }
+
     requestAnimationFrame(renderScene)
 }
 

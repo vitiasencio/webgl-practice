@@ -1,60 +1,36 @@
 import { createVertexBuffer, createIndexBuffer, bindAttributeToVertexBuffer } from '../js/utils.js';
 import { mat4, glMatrix } from '../js/gl-matrix/index.js'
 
-export class Cube {
+export class Axis {
 
     vertexPositions = [
-      -1, 1, 1,   
-      1, 1, 1,    
-      1, 1, -1,   
-      -1, 1, -1,  
-      -1, -1, 1,  
-      1, -1, 1,   
-      1, -1, -1,  
-      -1, -1, -1  
+      0.0, 0.0, 0.0,
+      1.0, 0.0, 0.0,
+      0.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 0.0,
+      0.0, 0.0, 1.0,
     ];
     vertexColors = [
-      1, 0, 1,    
-      1, 1, 1,    
-      0, 1, 1,    
-      0, 0, 1,    
-      1, 0, 0,    
-      1, 1, 0,    
-      0, 1, 0,    
-      0, 0, 0     
+      1.0, 0.0, 0.0,
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0,
+      0.0, 0.0, 1.0,
     ];
     
     indices = [
-      // cara de arriba
-      0, 1, 3,
-      3, 1, 2,
-      // abajo
-      7, 5, 4,
-      5, 7, 6,
-      // izquierda
-      3, 4, 0,
-      3, 7, 4,
-      // derecha
-      5, 2, 1,
-      5, 6, 2,
-      // adelante
-      4, 1, 0,
-      4, 5, 1,
-      // atrás
-      6, 3, 2,
-      6, 7, 3,
+        0, 1,
+        2, 3,
+        4, 5
     ];
 
-    color;
-
     scaleMatrix;
-    rotateMatrix;
-    translateMatrix;
-
-    rotation;
-    scale;
 
     modelMatrix;
+
+    scale;
 
     gl;
     program;
@@ -64,20 +40,12 @@ export class Cube {
         this.gl = gl;
         this.program = program;
 
-        let posx = this.randomPos(-2,2);
-        let posy = this.randomPos(-2,2);
-        let posz = this.randomPos(-2,2);
-
-        this.rotation = 0;
-        this.scale = 0.5;
-
         this.scaleMatrix = mat4.create();
-        this.rotateMatrix = mat4.create();
-        this.translateMatrix = mat4.create();
         this.modelMatrix = mat4.create();
-        
+
+        this.scale = 3;
+
         mat4.fromScaling(this.scaleMatrix, [this.scale, this.scale, this.scale]);
-        mat4.fromTranslation(this.translateMatrix, [posx, posy, posz]);
 
         let positionBuffer = createVertexBuffer(gl, this.vertexPositions);
         let colorBuffer = createVertexBuffer(gl, this.vertexColors);
@@ -102,24 +70,16 @@ export class Cube {
 
     render(){
 
-        mat4.fromRotation(this.rotateMatrix, glMatrix.toRadian(this.rotation++%360), [1, 0, 1]);
-        this.rotation = this.rotation % 360;
-
         mat4.identity(this.modelMatrix);
         mat4.multiply(this.modelMatrix, this.scaleMatrix, this.modelMatrix);
-        mat4.multiply(this.modelMatrix, this.rotateMatrix, this.modelMatrix);
-        mat4.multiply(this.modelMatrix, this.translateMatrix, this.modelMatrix);
 
         const modelMatrixLocation = this.gl.getUniformLocation(this.program, "modelMatrix")
         this.gl.uniformMatrix4fv(modelMatrixLocation, false, this.modelMatrix)
 
         this.gl.bindVertexArray(this.vao);
-        this.gl.drawElements(this.gl.TRIANGLES, this.indices.length, this.gl.UNSIGNED_SHORT, 0);
+        this.gl.drawElements(this.gl.LINES, this.indices.length, this.gl.UNSIGNED_SHORT, 0);
         this.gl.bindVertexArray(null);
 
     }
 
-    randomPos(min, max) {
-        return min + (max - min) * Math.random();
-    }
 }
