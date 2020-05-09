@@ -66,6 +66,7 @@ export function createIndexBuffer(gl, data) {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
     return positionBuffer;
+
 }
 
 export function bindAttributeToVertexBuffer(gl, positionAttributeLocation, size, positionBuffer){

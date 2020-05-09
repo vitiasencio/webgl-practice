@@ -4,6 +4,7 @@ import { mat4, glMatrix } from './js/gl-matrix/index.js'
 import { Cube } from './models/Cube.js';
 import { Axis } from './models/WorldAxis.js';
 
+
 const CANVASID = 'myCanvas';
 
 /**
@@ -55,6 +56,7 @@ const center = [0, 0, 0]
 const up = [0, 1, 0]
 mat4.lookAt(viewMatrix, eye, center, up)
 
+
 const fov = glMatrix.toRadian(45)
 const aspect = canvas.width / canvas.height
 const near = 0.1
@@ -63,6 +65,7 @@ mat4.perspective(projectionMatrix, fov, aspect, near, far)
 
 gl.uniformMatrix4fv(viewMatrixLocation, false, viewMatrix)
 gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix)
+
 
 /**
  * END CAMERA SETUP
@@ -73,7 +76,6 @@ gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 let sceneElements = [];
 let worldAxis = new Axis(gl, program);
-
 
 const addButton = document.getElementById("add-element");
 
@@ -107,3 +109,4 @@ function renderScene() {
 }
 
 requestAnimationFrame(renderScene)
+
