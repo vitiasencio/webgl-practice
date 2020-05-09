@@ -60,12 +60,13 @@ export function createVertexBuffer(gl, data) {
 }
 
 export function createIndexBuffer(gl, data) {
-    let indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    let positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, positionBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(data), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
-    return indexBuffer;
+    return positionBuffer;
+
 }
 
 export function bindAttributeToVertexBuffer(gl, positionAttributeLocation, size, positionBuffer){
